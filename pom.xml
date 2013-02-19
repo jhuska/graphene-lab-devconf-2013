@@ -31,6 +31,7 @@
         <version.arquillian.core>1.0.3.Final</version.arquillian.core>
         <version.arquillian.drone>1.2.0.Alpha1</version.arquillian.drone>
         <version.ticket-monster>2.0.10-SNAPSHOT</version.ticket-monster>
+        <version.jbossas>7.1.1.Final</version.jbossas>
     </properties>
 
     <dependencyManagement>
@@ -114,5 +115,20 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- containers -->
+        <profile>
+            <id>jbossas-remote</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.as</groupId>
+                    <artifactId>jboss-as-arquillian-container-remote</artifactId>
+                    <version>${version.jbossas}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>
 
