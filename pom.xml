@@ -114,6 +114,14 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemProperties>
+                        <arq.extension.webdriver.browserCapabilities>${browser.capabilities}</arq.extension.webdriver.browserCapabilities>
+                    </systemProperties>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
