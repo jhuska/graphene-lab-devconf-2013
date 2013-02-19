@@ -30,6 +30,7 @@
         <version.junit>4.10</version.junit>
         <version.arquillian.core>1.0.3.Final</version.arquillian.core>
         <version.arquillian.drone>1.2.0.Alpha1</version.arquillian.drone>
+        <version.ticket-monster>2.0.10-SNAPSHOT</version.ticket-monster>
     </properties>
 
     <dependencyManagement>
@@ -83,5 +84,35 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>prepare-application</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.jboss.jdf.examples</groupId>
+                                    <artifactId>ticket-monster</artifactId>
+                                    <version>${version.ticket-monster}</version>
+                                    <type>war</type>
+                                    <destFileName>ticket-monster.war</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>target</outputDirectory>
+                            <overWriteIfNewer>false</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
 
