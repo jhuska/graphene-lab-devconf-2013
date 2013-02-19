@@ -71,7 +71,53 @@ public class TestEvents extends AbstractTicketMonsterTest {
 
     @Test
     public void testBookConcert() {
-
+        // wait until the page is loaded
+        Graphene.waitGui()
+                .until()
+                .element(concertMenu)
+                .is()
+                .present();
+        // show concerts submenu
+        concertHeader.click();
+        Graphene.waitGui()
+                .until()
+                .element(concertMenu)
+                .attribute("style")
+                .not()
+                .equalTo("height: 0px;");
+        // select concert
+        Graphene.guardXhr(concertLink).click();
+        // select venue
+        Assert.assertFalse(booking.isDisplayed());
+        venueSelect.selectByVisibleText("Toronto : Roy Thomson Hall");
+        Graphene.waitGui()
+                .until()
+                .element(booking)
+                .is()
+                .visible();
+        // book
+        Graphene.guardXhr(bookButton).click();
+        // select tickets
+        sectionSelect.selectByVisibleText("A - Premier platinum reserve");
+        Graphene.waitGui()
+                .until()
+                .element(numberOfTickets)
+                .is()
+                .present();
+        numberOfTickets.click();
+        numberOfTickets.sendKeys("2");
+        addButton.click();
+        Graphene.waitGui()
+                .until()
+                .element(trash)
+                .is()
+                .present();
+        // checkout
+        email.click();
+        email.sendKeys("example@example.com");
+        Graphene.guardXhr(checkout).click();
+        // check correct page
+        Assert.assertEquals("Booking #1 confirmed!", pageHeader.getText());
     }
 
 }
