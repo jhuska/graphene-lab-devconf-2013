@@ -126,6 +126,20 @@
     </build>
 
     <profiles>
+        <!-- browsers -->
+        <profile>
+            <id>firefox</id>
+            <properties>
+                <browser.capabilities>firefox</browser.capabilities>
+            </properties>
+        </profile>
+        <profile>
+            <id>htmlunit</id>
+            <properties>
+                <browser.capabilities>htmlUnit</browser.capabilities>
+            </properties>
+        </profile>
+
         <!-- containers -->
         <profile>
             <id>jbossas-remote</id>
