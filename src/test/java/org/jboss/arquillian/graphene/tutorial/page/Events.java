@@ -1,57 +1,43 @@
 package org.jboss.arquillian.graphene.tutorial.page;
 
-import org.jboss.arquillian.drone.api.annotation.Drone;
-import org.jboss.arquillian.graphene.Graphene;
-import org.jboss.arquillian.graphene.enricher.findby.ByJQuery;
+import com.google.common.base.Predicate;
+import static org.jboss.arquillian.graphene.Graphene.waitAjax;
 import org.jboss.arquillian.graphene.enricher.findby.FindBy;
+import org.jboss.arquillian.graphene.tutorial.page.fragment.MenuGroup;
+import org.jboss.arquillian.graphene.tutorial.page.fragment.NavigationMenu;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class Events extends TicketMonsterPage {
 
-    @FindBy(jquery = "a[data-target='#category-1-collapsible']")
-    private WebElement concertHeader;
-    @FindBy(css = "#category-1-collapsible")
-    private WebElement concertMenu;
+    @FindBy(id = "itemMenu")
+    private NavigationMenu verticalMenu;
 
-    @Drone
-    private WebDriver browser;
+    @FindBy(className = "special-title")
+    private WebElement titleOfTheConcert;
 
     @Override
     public void waitUntilPageIsLoaded() {
-        super.waitUntilPageIsLoaded();
-        Graphene.waitGui()
-                .until()
-                .element(concertMenu)
-                .is()
-                .present();
+        verticalMenu.waitUntilMenuIsLoaded();
     }
 
     public void toggleConcerts() {
-        boolean expanding = !areConcertsExpanded();
-        concertHeader.click();
-        if (expanding) {
-            Graphene.waitGui()
-                    .until()
-                    .element(concertMenu)
-                    .attribute("style")
-                    .not()
-                    .equalTo("height: 0px;");
-        } else {
-            Graphene.waitGui()
-                    .until()
-                    .element(concertMenu)
-                    .attribute("style")
-                    .equalTo("height: 0px;");
-        }
+        verticalMenu.getMenuGroup(0).expand();
     }
 
     public boolean areConcertsExpanded() {
-        return concertHeader.getAttribute("style") != null && concertHeader.getAttribute("style").equals("height: 0px;");
+        return verticalMenu.getMenuGroup(0).isExpanded();
     }
 
-    public void goToConcert(String concert) {
-        Graphene.guardXhr(browser.findElement(ByJQuery.jquerySelector("a[data-original-title='"+concert+"']"))).click();
+    public void goToConcert(final String concert) {
+        MenuGroup concerts = verticalMenu.getMenuGroup(0);
+        concerts.getMenuItem(concert).toggle();
+        waitAjax().until(new Predicate<WebDriver>() {
+            @Override
+            public boolean apply(WebDriver input) {
+                return titleOfTheConcert.getText().trim().equals(concert);
+            }
+        });
     }
 
 }
