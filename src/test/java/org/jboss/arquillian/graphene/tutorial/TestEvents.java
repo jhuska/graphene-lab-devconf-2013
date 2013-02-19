@@ -52,7 +52,21 @@ public class TestEvents extends AbstractTicketMonsterTest {
 
     @Test
     public void testClickOnConcerts() {
-
+        // wait until the page is loaded
+        Graphene.waitGui()
+                .until()
+                .element(concertMenu)
+                .is()
+                .present();
+        // test
+        Assert.assertEquals(concertMenu.getAttribute("style"), "height: 0px;");
+        concertHeader.click();
+        Graphene.waitGui()
+                .until()
+                .element(concertMenu)
+                .attribute("style")
+                .not()
+                .equalTo("height: 0px;");
     }
 
     @Test
